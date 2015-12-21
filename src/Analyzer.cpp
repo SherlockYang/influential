@@ -57,8 +57,10 @@ int             Analyzer::UserInfluence(int topK, const char* fileDir)
         userInfluenceList.push_back(totalInfluence);
     }
     sort(userInfluenceList.begin(), userInfluenceList.end(), DecreaseCmp);
+    /*
     for (int i = 0; i < topK; i ++)
         printf("%.5lf\n", userInfluenceList[i]);
+    */
 
     // dynamic of overall influence
     vector<double> influenceList;
@@ -80,9 +82,11 @@ int             Analyzer::UserInfluence(int topK, const char* fileDir)
     }
     for (unsigned int i = 0; i < influenceList.size(); i ++)
     {
+        /*
         if (topK > 0)
             influenceList[i] /= topK;
         else
+        */
             influenceList[i] /= (dataLoader -> userList.size() + 0.0);
     }
     FILE* fout = fopen(fileDir, "w");

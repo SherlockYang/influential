@@ -26,7 +26,7 @@ int     main()
     //dataLoader -> LoadDiffusion(DIFFUSION_FILE_DIR);
 
     Analyzer* analyzer = new Analyzer(dataLoader);
-    int topK = 50;
+    int topK = 100;
     string fileDir = "./output/user_influence";
     if (topK > 0)
         fileDir += "_top" + Util::Int2Str(topK) + ".out";
