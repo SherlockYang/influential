@@ -26,6 +26,11 @@
 
 using namespace std;
 
+bool    DecreaseCmp(double a, double b)
+{
+    return a > b;
+}
+
 Analyzer::Analyzer(DataLoader* dataLoader)
 {
     this -> dataLoader = dataLoader;
@@ -45,12 +50,13 @@ int             Analyzer::UserInfluence(int topK, const char* fileDir)
     vector<double> userInfluenceList;
     for (unsigned int i = 0; i < dataLoader -> userList.size(); i ++)
     {
+        User* user = dataLoader -> userList[i];
         double totalInfluence = 0.0;
         for (unsigned int j = 0; j < user -> influenceList.size(); j ++)
-            totalInfluence += user -> influencelist[j];
+            totalInfluence += user -> influenceList[j];
         userInfluenceList.push_back(totalInfluence);
     }
-    sort(userInfluenceList.beign(), userInfluenceList.end());
+    sort(userInfluenceList.begin(), userInfluenceList.end(), DecreaseCmp);
     for (int i = 0; i < topK; i ++)
         printf("%.5lf\n", userInfluenceList[i]);
 
@@ -63,7 +69,7 @@ int             Analyzer::UserInfluence(int topK, const char* fileDir)
         double totalInfluence = 0.0;
         for (unsigned int j = 0; j < user -> influenceList.size(); j ++)
             totalInfluence += user -> influenceList[j];
-        if (topK > 0 && totalInfluence < userInfluence[topK - 1])
+        if (topK > 0 && totalInfluence < userInfluenceList[topK - 1])
             continue;
         for (unsigned int j = 0; j < user -> influenceList.size(); j ++) 
         {

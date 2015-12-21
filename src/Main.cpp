@@ -26,7 +26,13 @@ int     main()
     //dataLoader -> LoadDiffusion(DIFFUSION_FILE_DIR);
 
     Analyzer* analyzer = new Analyzer(dataLoader);
-    analyzer -> UserInfluence(10, "./output/user_influence.out");
+    int topK = 50;
+    string fileDir = "./output/user_influence";
+    if (topK > 0)
+        fileDir += "_top" + Util::Int2Str(topK) + ".out";
+    else
+        fileDir += ".out";
+    analyzer -> UserInfluence(topK, fileDir.c_str());
     return 0;
 }
 

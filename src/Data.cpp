@@ -61,7 +61,7 @@ DataLoader::DataLoader()
 int             User::AddInfluence(double val, int t)
 {
     int tid = t / 7;
-    for (unsigned int i = influenceList.size(); i <= tid; i ++)
+    for (unsigned int i = influenceList.size(); (int) i <= tid; i ++)
     {
         influenceList.push_back(0.0);
     }
@@ -373,6 +373,9 @@ int             DataLoader::LoadDiffusion(string fileDir)
     {
         postList[i] -> postTime -= firstTime;
     }
+    printf("===== Data Info =====\n");
+    printf("#users: %d\n", (int) userList.size());
+    printf("#posts: %d\n", (int) postList.size());
     return 0;
 }
 
@@ -408,7 +411,7 @@ int         DataLoader::LoadData(string networkFile, string postFile)
     int D = 1;
     int F = 1;
     //int N = 2028;
-    int N = 100;
+    //int N = 100;
     newInputs.clear();
     activeUserSet.clear();
     for (int day = 1; day <= D; day ++)
