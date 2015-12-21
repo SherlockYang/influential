@@ -42,7 +42,26 @@ int             Analyzer::UserInfluence(const char* fileDir)
     }
 
     // dynamic of overall influence
+    vector<double> influenceList;
+    influenceList.clear();
+    for (unsigned int i = 0; i < dataLoader -> userList.size(); i ++)
+    {
+        User* user = dataLoader -> userList[i];
+        for (unsigned int j = 0; j < user -> influenceList.size(); j ++) 
+        {
+            for (unsigned int k = influenceList.size(); k <= j; k ++)
+                influenceList.push_back(0.0);
+            influenceList[j] += user -> influenceList[j];
+        }
+    }
+    for (unsigned int i = 0; i < influenceList.size(); i ++)
+        influenceList[i] /= (dataLoader -> userList.size() + 0.0);
     FILE* fout = fopen(fileDir, "w");
+    for (unsigned int i = 0; i < influenceList.size(); i ++)
+    {
+        fprintf(fout, "%d %.5lf\n", i, influenceList[i]);
+    }
+    /*
     for (unsigned int i = 0; i < dataLoader -> userList.size(); i ++)
     {
         User* user = dataLoader -> userList[i];
@@ -53,6 +72,7 @@ int             Analyzer::UserInfluence(const char* fileDir)
         }
         fprintf(fout, "\n");
     }
+    */
     fclose(fout);
     return 0;
 }
