@@ -16,7 +16,8 @@ public:
     string          name;
     vector<User*>   followerList;
     vector<User*>   followeeList;
-    vector<int>     influenceList;
+    vector<double>  influenceList;
+    int             AddInfluence(int val, int t);
 };
 
 class       Paper 

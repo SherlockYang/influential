@@ -58,12 +58,12 @@ DataLoader::DataLoader()
     postList.clear();
 }
 
-int             User::AddInfluence(int val, int t)
+int             User::AddInfluence(double val, int t)
 {
     int tid = t / 7;
     for (unsigned int i = influenceList.size(); i <= tid; i ++)
     {
-        influenceList.push_back(0);
+        influenceList.push_back(0.0);
     }
     influenceList[tid] += val;
     return 0;
@@ -359,6 +359,19 @@ int             DataLoader::LoadDiffusion(string fileDir)
             postList[sid] -> source += tokens[i];
         }
         */
+    }
+
+    int firstTime = -1;
+    for (unsigned int i = 0; i < postList.size(); i ++)
+    {
+        if (postList[i] -> postTime < firstTime || firstTime == -1)
+        {
+            firstTime = postList[i] -> postTime;
+        }
+    }
+    for (unsigned int i = 0; i < postList.size(); i ++)
+    {
+        postList[i] -> postTime -= firstTime;
     }
     return 0;
 }
