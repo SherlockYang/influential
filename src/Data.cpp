@@ -60,7 +60,7 @@ DataLoader::DataLoader()
 
 int             User::AddInfluence(double val, int t)
 {
-    int tid = t / 7;
+    int tid = t / 14;
     for (unsigned int i = influenceList.size(); (int) i <= tid; i ++)
     {
         influenceList.push_back(0.0);
