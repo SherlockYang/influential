@@ -42,7 +42,13 @@ int             Analyzer::UserInfluence(int topK, const char* fileDir)
     {
         Post* post = dataLoader -> postList[i];
         int uid = post -> user -> id;
-        int val = (int) post -> retweetList.size();
+        int degree = dataLoader -> userList[uid] -> followerList.size();
+        double val = post -> retweetList.size() + 0.0;
+        if (degree > val)
+            val /= degree;
+        else
+            val = 1.0;
+        val /= 50.0;
         dataLoader -> userList[uid] -> AddInfluence(val, post -> postTime);
     }
 
@@ -51,6 +57,7 @@ int             Analyzer::UserInfluence(int topK, const char* fileDir)
     for (unsigned int i = 0; i < dataLoader -> userList.size(); i ++)
     {
         User* user = dataLoader -> userList[i];
+        user -> CountInfluence();
         double totalInfluence = 0.0;
         for (unsigned int j = 0; j < user -> influenceList.size(); j ++)
             totalInfluence += user -> influenceList[j];
@@ -64,7 +71,9 @@ int             Analyzer::UserInfluence(int topK, const char* fileDir)
 
     // dynamic of overall influence
     vector<double> influenceList;
+    vector<int> countList;
     influenceList.clear();
+    countList.clear();
     for (unsigned int i = 0; i < dataLoader -> userList.size(); i ++)
     {
         User* user = dataLoader -> userList[i];
@@ -76,19 +85,23 @@ int             Analyzer::UserInfluence(int topK, const char* fileDir)
         for (unsigned int j = 0; j < user -> influenceList.size(); j ++) 
         {
             for (unsigned int k = influenceList.size(); k <= j; k ++)
+            {
                 influenceList.push_back(0.0);
+                countList.push_back(0);
+            }
             influenceList[j] += user -> influenceList[j];
+            countList[j] ++;
         }
     }
+    int maxCount = 0;
+    for (unsigned int i = 0; i < countList.size(); i ++)
+        if (countList[i] > maxCount)
+            maxCount = countList[i];
     for (unsigned int i = 0; i < influenceList.size(); i ++)
     {
-        /*
-        if (topK > 0)
-            influenceList[i] /= topK;
-        else
-        */
-            influenceList[i] /= (dataLoader -> userList.size() + 0.0);
+        influenceList[i] /= maxCount;
     }
+    printf("Involved users: %d\n", maxCount);
     FILE* fout = fopen(fileDir, "w");
     for (unsigned int i = 0; i < influenceList.size(); i ++)
     {

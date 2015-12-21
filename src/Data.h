@@ -18,6 +18,9 @@ public:
     vector<User*>   followeeList;
     vector<double>  influenceList;
     int             AddInfluence(double val, int t);
+    int             CountInfluence();
+private:
+    vector<int>     countList;
 };
 
 class       Paper 
@@ -66,6 +69,7 @@ public:
     map<string, int>    postIdMap;
     
     DataLoader();
+    int                 LoadDegree(string fileDir);
     int                 LoadFlickr(string fileDir);
     int                 LoadPaper(string citationFile, string paperFile, string authorFile);
     int                 LoadData(string networkFile, string postFile);

@@ -24,6 +24,8 @@
 
 using namespace std;
 
+vector<int> degreeList;
+
 Paper::Paper()
 {
     referList.clear();
@@ -60,12 +62,25 @@ DataLoader::DataLoader()
 
 int             User::AddInfluence(double val, int t)
 {
-    int tid = t / 14;
+    int tid = t / 7;
     for (unsigned int i = influenceList.size(); (int) i <= tid; i ++)
     {
         influenceList.push_back(0.0);
+        countList.push_back(0);
     }
     influenceList[tid] += val;
+    countList[tid] ++;
+    return 0;
+}
+
+int             User::CountInfluence()
+{
+    for (unsigned int i = 0; i < influenceList.size(); i ++)
+    {
+        if (countList[i] > 0)
+            influenceList[i] /= countList[i];
+        countList[i] = 0;
+    }
     return 0;
 }
 
@@ -239,6 +254,7 @@ int         DataLoader::LoadPaper(string citationFile, string paperFile, string 
 
 int             DataLoader::LoadNetwork(string fileDir)
 {
+    degreeList.clear();
     vector<string> inputs = Util::ReadFromFile(fileDir.c_str());
     int edgeCnt = 0;
     int proc = -1;
@@ -253,8 +269,14 @@ int             DataLoader::LoadNetwork(string fileDir)
         bool found = false; 
         vector<string> tokens = Util::StringTokenize(inputs[i]);
         int source = GetUserId(tokens[0]);
+        // temporally !!!!!
+        if (source == -1)
+            continue;
         //int source = GetOrInsertUserId(tokens[0]);
         new_line += tokens[0];
+        for (unsigned int j = degreeList.size(); j <= source; j ++)
+            degreeList.push_back(0);
+        degreeList[source] = tokens.size() - 1;
         for (unsigned int j = 1; j < tokens.size(); j ++)
         {
             //int target = GetOrInsertUserId(tokens[j]);
@@ -395,13 +417,34 @@ int         DataLoader::LoadContent(string fileDir)
     return 0;   
 }
 
+int         DataLoader::LoadDegree(string fileDir)
+{
+    vector<string> input = Util::ReadFromFile(fileDir.c_str());
+    printf("Degree: %d\n", (int) input.size());
+    for (unsigned int i = 0; i < input.size() && i < userList.size(); i ++)
+    {
+        string line = input[i];
+        int val = Util::String2Int(line);
+        for (int j = 0; j < val; j ++)
+            userList[i] -> followerList.push_back(NULL);
+    }
+}
+
 int         DataLoader::LoadData(string networkFile, string postFile)
 {
     LoadDiffusion(postFile);
+    LoadDegree(networkFile + "/degree.in");
     /*
-    LoadNetwork("network_part_0.in");
-    LoadNetwork("network_part_1.in");
-    LoadNetwork("network_part_2.in");
+    LoadNetwork(networkFile + "/network_part_0.in");
+    LoadNetwork(networkFile + "/network_part_1.in");
+    LoadNetwork(networkFile + "/network_part_2.in");
+    FILE* fout = fopen((networkFile + "/degree.in").c_str(), "w");
+    for (unsigned int i = 0; i < userList.size(); i ++)
+    {
+        //fprintf(fout, "%d\n", (int) userList[i] -> followerList.size());
+        fprintf(fout, "%d\n", degreeList[i]);
+    }
+    fclose(fout);
     */
     return 0;
     //LoadDiffusion("/home/yang/projects/role-aware/data/tencent/diffusion/10percentage_retweet.txt");

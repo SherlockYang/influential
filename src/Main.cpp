@@ -11,7 +11,7 @@ using namespace std;
 int     main()
 {
     int TIME_STEP = 600; // m: 60, h: 3600
-    string NETWORK_FILE_DIR = "/mnt/hd2/Tencent_Follow_data/Tencent_Follow_data/";
+    string NETWORK_FILE_DIR = "/home/yang/data/tencent_weibo";
     string DIFFUSION_FILE_DIR = "/home/yang/data/tencent_weibo/hot_posts100.txt";
     string PAPER_FILE_DIR = "../../../data/citation/paper.txt";
     string CITATION_FILE_DIR = "/home/yang/data/citation/citation.txt";
@@ -26,7 +26,7 @@ int     main()
     //dataLoader -> LoadDiffusion(DIFFUSION_FILE_DIR);
 
     Analyzer* analyzer = new Analyzer(dataLoader);
-    int topK = 100;
+    int topK = 2000;
     string fileDir = "./output/user_influence";
     if (topK > 0)
         fileDir += "_top" + Util::Int2Str(topK) + ".out";
