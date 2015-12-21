@@ -79,7 +79,12 @@ int             Analyzer::UserInfluence(int topK, const char* fileDir)
         }
     }
     for (unsigned int i = 0; i < influenceList.size(); i ++)
-        influenceList[i] /= (dataLoader -> userList.size() + 0.0);
+    {
+        if (topK > 0)
+            influenceList[i] /= topK;
+        else
+            influenceList[i] /= (dataLoader -> userList.size() + 0.0);
+    }
     FILE* fout = fopen(fileDir, "w");
     for (unsigned int i = 0; i < influenceList.size(); i ++)
     {
