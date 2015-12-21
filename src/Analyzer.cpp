@@ -31,7 +31,7 @@ Analyzer::Analyzer(DataLoader* dataLoader)
     this -> dataLoader = dataLoader;
 }
 
-int             Analyzer::UserInfluence(const char* fileDir)
+int             Analyzer::UserInfluence(int topK, const char* fileDir)
 {
     for (unsigned int i = 0; i < dataLoader -> postList.size(); i ++)
     {
@@ -41,12 +41,30 @@ int             Analyzer::UserInfluence(const char* fileDir)
         dataLoader -> userList[uid] -> AddInfluence(val, post -> postTime);
     }
 
+    // rank user influence
+    vector<double> userInfluenceList;
+    for (unsigned int i = 0; i < dataLoader -> userList.size(); i ++)
+    {
+        double totalInfluence = 0.0;
+        for (unsigned int j = 0; j < user -> influenceList.size(); j ++)
+            totalInfluence += user -> influencelist[j];
+        userInfluenceList.push_back(totalInfluence);
+    }
+    sort(userInfluenceList.beign(), userInfluenceList.end());
+    for (int i = 0; i < topK; i ++)
+        printf("%.5lf\n", userInfluenceList[i]);
+
     // dynamic of overall influence
     vector<double> influenceList;
     influenceList.clear();
     for (unsigned int i = 0; i < dataLoader -> userList.size(); i ++)
     {
         User* user = dataLoader -> userList[i];
+        double totalInfluence = 0.0;
+        for (unsigned int j = 0; j < user -> influenceList.size(); j ++)
+            totalInfluence += user -> influenceList[j];
+        if (topK > 0 && totalInfluence < userInfluence[topK - 1])
+            continue;
         for (unsigned int j = 0; j < user -> influenceList.size(); j ++) 
         {
             for (unsigned int k = influenceList.size(); k <= j; k ++)
@@ -61,6 +79,7 @@ int             Analyzer::UserInfluence(const char* fileDir)
     {
         fprintf(fout, "%d %.5lf\n", i, influenceList[i]);
     }
+
     /*
     for (unsigned int i = 0; i < dataLoader -> userList.size(); i ++)
     {

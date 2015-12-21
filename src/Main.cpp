@@ -26,7 +26,7 @@ int     main()
     //dataLoader -> LoadDiffusion(DIFFUSION_FILE_DIR);
 
     Analyzer* analyzer = new Analyzer(dataLoader);
-    analyzer -> UserInfluence("./output/user_influence.out");
+    analyzer -> UserInfluence(10, "./output/user_influence.out");
     return 0;
 }
 
