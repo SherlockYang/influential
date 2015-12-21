@@ -12,7 +12,7 @@ class       Analyzer
 {
 public:
     Analyzer(DataLoader* dataLoader);
-    int                 UserInfluence();
+    int                 UserInfluence(const char* fileDir);
 private:
     DataLoader*         dataLoader;
 };

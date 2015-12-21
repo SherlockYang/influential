@@ -17,7 +17,7 @@ public:
     vector<User*>   followerList;
     vector<User*>   followeeList;
     vector<double>  influenceList;
-    int             AddInfluence(int val, int t);
+    int             AddInfluence(double val, int t);
 };
 
 class       Paper 

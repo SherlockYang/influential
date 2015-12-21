@@ -1,5 +1,6 @@
 #include "Util.h"
 #include "Data.h"
+#include "Analyzer.h"
 
 #include <sstream>
 #include <fstream>
@@ -24,6 +25,8 @@ int     main()
     dataLoader -> LoadData(NETWORK_FILE_DIR, DIFFUSION_FILE_DIR);
     //dataLoader -> LoadDiffusion(DIFFUSION_FILE_DIR);
 
+    Analyzer* analyzer = new Analyzer(dataLoader);
+    analyzer -> UserInfluence("./output/user_influence.out");
     return 0;
 }
 

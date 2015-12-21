@@ -31,7 +31,7 @@ Analyzer::Analyzer(DataLoader* dataLoader)
     this -> dataLoader = dataLoader;
 }
 
-int             Analyzer::UserInfluence()
+int             Analyzer::UserInfluence(const char* fileDir)
 {
     for (unsigned int i = 0; i < dataLoader -> postList.size(); i ++)
     {
@@ -40,7 +40,9 @@ int             Analyzer::UserInfluence()
         int val = (int) post -> retweetList.size();
         dataLoader -> userList[uid] -> AddInfluence(val, post -> postTime);
     }
-    FILE* fout = fopen("output/user_influence.out", "w");
+
+    // dynamic of overall influence
+    FILE* fout = fopen(fileDir, "w");
     for (unsigned int i = 0; i < dataLoader -> userList.size(); i ++)
     {
         User* user = dataLoader -> userList[i];
@@ -49,8 +51,9 @@ int             Analyzer::UserInfluence()
         {
             fprintf(fout, " %d:%.3lf", j, user -> influenceList[j]);
         }
+        fprintf(fout, "\n");
     }
-    fclsoe(fout);
+    fclose(fout);
     return 0;
 }
 
